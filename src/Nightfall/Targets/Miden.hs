@@ -34,9 +34,9 @@ defaultConfig = Config
 
 -- | Context for the transpilation, this is the state of the State Monad in which transpilation happens
 data Context = Context
-    { progName :: String                   -- ^ Name of the program, for outputs logs, etc.
+    { progName :: Text                   -- ^ Name of the program, for outputs logs, etc.
     , memPos :: MemoryIndex                -- ^ Next free indice in Miden's global memory
-    , variables :: Map String MemoryIndex  -- ^ Variables in the EDSL are stored in Miden's random
+    , variables :: Map Text MemoryIndex  -- ^ Variables in the EDSL are stored in Miden's random
                                              -- access memory, we keep a map to match them
     , config :: Config                     -- ^ Transpilation configuration options
     }

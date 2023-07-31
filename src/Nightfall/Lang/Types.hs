@@ -47,6 +47,7 @@ module Nightfall.Lang.Types ( Felt
 
 import Nightfall.Lang.Internal.Types
 
+import Data.Text (Text)
 import Data.Word (Word32)
 import Data.Coerce (coerce)
 
@@ -68,14 +69,14 @@ newtype Statement = Statement Statement_
   deriving (Eq, Show)
 
 data ZKProgram = ZKProgram
-    { pName :: String            -- ^ Program name, is this needed?
+    { pName :: Text            -- ^ Program name, is this needed?
     , pStatements :: [Statement] -- ^ List of statements comprising the program
     , pPublicInputs :: [Felt]    -- ^ Defining the public inputs as a list of field elements for now
     , pSecretInputs :: FilePath  -- ^ For now, for simplicty, we'll be referring to a '.inputs' file
     }
 
 -- | Helper to quickly make a simple @ZKProgram from a list of statements, no inputs
-mkSimpleProgram :: String -> [Statement] -> ZKProgram
+mkSimpleProgram :: Text -> [Statement] -> ZKProgram
 mkSimpleProgram name stmts = ZKProgram
     { pName = name
     , pStatements = stmts
@@ -84,7 +85,7 @@ mkSimpleProgram name stmts = ZKProgram
     }
 
 -- | Helper to build a @ZKPeogram
-mkZKProgram :: String -> [Statement] -> [Felt] -> FilePath -> ZKProgram
+mkZKProgram :: Text -> [Statement] -> [Felt] -> FilePath -> ZKProgram
 mkZKProgram name stmts pubs secretFP = ZKProgram
     { pName = name
     , pStatements = stmts
@@ -193,7 +194,7 @@ ret :: Maybe (Expr a)-> Statement
 ret Nothing = Statement $ Return Nothing
 ret (Just (Expr e)) = Statement $ Return (Just e)
 
-comment :: String -> Statement
+comment :: Text -> Statement
 comment = Statement . Comment
 
 emptyLine :: Statement

@@ -23,11 +23,13 @@ module Nightfall.MASM.Types
 import Nightfall.MASM.Integral
 import Nightfall.Lang.Types
 
-import Control.Monad.Writer.Strict
+import Data.DList (DList)
 import qualified Data.DList as DList
+import Control.Monad.Writer.Strict
 import Data.Map (Map)
 import Data.String
-import Data.Text.Lazy (Text)
+import qualified TextShow as Text
+import Data.Text (Text)
 import Data.Typeable
 import Data.Word (Word32)
 import qualified GHC.Exts
@@ -135,15 +137,15 @@ data Instruction
   | EmptyL     -- ability to insert empty line for spacing (purely decorative and for easier inspection)
   deriving (Eq, Ord, Show, Generic, Typeable)
 
-newtype PpMASM a = PpMASM {runPpMASM :: Writer (DList.DList String) a}
+newtype PpMASM a = PpMASM {runPpMASM :: Writer (DList Text.Builder) a}
   deriving (Generic, Typeable, Functor, Applicative, Monad)
 
-deriving instance MonadWriter (DList.DList String) PpMASM
+deriving instance MonadWriter (DList Text.Builder) PpMASM
 
 instance (a ~ ()) => IsString (PpMASM a) where
-  fromString s = tell [s]
+  fromString s = tell [Text.fromString s]
 
 instance (a ~ ()) => GHC.Exts.IsList (PpMASM a) where
-  type Item (PpMASM a) = String
+  type Item (PpMASM a) = Text.Builder
   fromList = tell . DList.fromList
   toList = DList.toList . snd . runWriter . runPpMASM

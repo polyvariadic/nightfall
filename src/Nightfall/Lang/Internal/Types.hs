@@ -9,9 +9,11 @@ module Nightfall.Lang.Internal.Types
 
 import Nightfall.Lang.Internal.Felt
 
-type VarName = String
+import Data.Text (Text)
 
-type FunName = String
+type VarName = Text
+
+type FunName = Text
 
 -- | Unary operations.
 data UnOp =
@@ -75,7 +77,7 @@ data Statement_ =
     | Return (Maybe Expr_)
 
     -- | Comment
-    | Comment String
+    | Comment Text
 
     -- | Allow to add empty lines in the generated code, for clarity
     | EmptyLine

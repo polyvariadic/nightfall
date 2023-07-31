@@ -9,9 +9,9 @@ import Control.Monad
 import Control.Monad.Writer.Strict
 
 import qualified Data.DList as DList
-import qualified Data.Text.Lazy as T
+import qualified Data.Text as Text
 import Data.Foldable
-import Data.Text.Lazy (Text, pack, unpack)
+import Data.Text (Text, pack, unpack)
 
 import Nightfall.MASM.Callgraph
 import Nightfall.MASM.Types
@@ -23,23 +23,23 @@ accessibleStackDepth :: Int
 accessibleStackDepth = 16
 
 indent :: PpMASM a -> PpMASM a
-indent = censor (fmap ("  "++))
+indent = censor (fmap ("  " <>))
 
-ppMASM :: Module -> String
-ppMASM = unlines . toList . execWriter . runPpMASM . ppModule
+ppMASM :: Module -> Text
+ppMASM = Text.unlines . toList . execWriter . runPpMASM . ppModule
 
-runPPMasm :: PpMASM a -> String
-runPPMasm = unlines . toList . execWriter . runPpMASM
+runPPMasm :: PpMASM a -> Text
+runPPMasm = Text.unlines . toList . execWriter . runPpMASM
 
 ppModule :: Module -> PpMASM ()
 ppModule m = do
-  tell $ DList.fromList $ fmap (("use."++) . unpack) (moduleImports m)
+  tell $ DList.fromList $ fmap ("use." <>) (moduleImports m)
   traverse_ ppProc . sortProcs $ moduleProcs m
   ppProgram (moduleProg m)
 
 ppProc :: (Text, Proc) -> PpMASM ()
 ppProc (name, p) = do
-  [ "proc." ++ T.unpack name ++ "." ++ show (procNLocals p) ]
+  [ "proc." <> name <> "." <> Text.pack (show $ procNLocals p) ]
   indent $ traverse_ ppInstr (procInstrs p)
   "end"
 
@@ -50,7 +50,7 @@ ppProgram p = do
   "end"
 
 ppInstr :: Instruction -> PpMASM ()
-ppInstr (Exec pname) = [ "exec." ++ unpack pname ]
+ppInstr (Exec pname) = [ "exec." <> pname ]
 ppInstr (If {thenBranch, elseBranch}) = do
   "if.true"
   indent $ traverse_ ppInstr thenBranch
