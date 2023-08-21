@@ -4,11 +4,11 @@ begin
   # Simple addition, but with a variable storing a value
   # a = 999
   # a + 1. It should return 1000
-  push.(999 `modulo` 18446744069414584321)
+  push.999
   # var a
-  mem_store.MemoryIndex 0
+  mem_store.0
   # var a (felt)
-  mem_load.MemoryIndex 0
-  push.(1 `modulo` 18446744069414584321)
+  mem_load.0
+  push.1
   add
 end
