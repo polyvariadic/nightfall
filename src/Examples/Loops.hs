@@ -23,8 +23,8 @@ sumTo10Stmts :: Body ()
 sumTo10Stmts = do
     comment "Simple programs that sums numbers from 0 to 10."
     comment "It should return 55"
-    Felt <- declare.n 10
-    Felt <- declare.acc 0
+    Var <- declare.n 10
+    Var <- declare.acc 0
     while (get.n `gt` 0) $ do
         set.acc $ get.acc + get.n
         set.n $ get.n - 1

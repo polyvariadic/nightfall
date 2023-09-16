@@ -55,12 +55,12 @@ ifVarBody = do
     comment "It sums a=145 + b=79 and compares equality with target=203."
     comment "If equal, it returns okVal=10, otherwise nokVal=20"
     comment "It should return 20"
-    Felt <- declare.a 145
-    Felt <- declare.b 79
-    Felt <- declare.target 203
-    Felt <- declare.sum $ get.a + get.b
-    Felt <- declare.okVal 10
-    Felt <- declare.nokVal 20
+    Var <- declare.a 145
+    Var <- declare.b 79
+    Var <- declare.target 203
+    Var <- declare.sum $ get.a + get.b
+    Var <- declare.okVal 10
+    Var <- declare.nokVal 20
     ifElse (get.sum `eq` get.target)
         (ret get.okVal)
         (ret get.nokVal)
@@ -85,8 +85,8 @@ simpleInfBody = do
     comment "if n1=4238 <= n2=21987 then n1 else n2."
     comment "It should return 4238"
     emptyLine
-    Felt <- declare.n1 4238
-    Felt <- declare.n2 21987
+    Var <- declare.n1 4238
+    Var <- declare.n2 21987
     ifElse (get.n1 `lte` get.n2)
         (ret get.n1)
         (ret get.n2)

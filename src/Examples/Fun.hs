@@ -1,5 +1,7 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeApplications #-}
 
 module Examples.Fun ( collatzFixedProg
                     , collatzPrivProg
@@ -26,9 +28,9 @@ collatzFixedStmts = do
     comment "Compute the Collatz sequence, starting from a fixed position: 10 and returns the length of the sequence."
     comment "It should return 7"
     emptyLine
-    Felt <- declare.start 10
-    Felt <- declare.length 1
-    Felt <- declare.n get.start
+    Var <- declare.start 10
+    Var <- declare.length 1
+    Var <- declare.n get.start
     while (get.n `gt` 1) $ do
         set.length $ get.length + 1
         ifElse (isOdd get.n)
@@ -57,9 +59,9 @@ collatzPrivStmts = do
     comment "Compute the Collatz sequence, starting position taken from secret input"
     comment "It returns the length of the sequence"
     emptyLine
-    Felt <- declare.start nextSecret
-    Felt <- declare.n get.start
-    Felt <- declare.length 1
+    Var @Felt <- declare.start nextSecret
+    Var <- declare.n get.start
+    Var <- declare.length 1
     while (get.n `gt` 1) $ do
         add.mut.length 1
         ifElse (isOdd get.n)

@@ -191,23 +191,12 @@ data Prefix prefix a = Prefix
 type TypeOf :: Symbol -> Type
 type family TypeOf var
 
+data Var name a where
+    Var :: forall a name. TypeOf name ~ a => Var name a
+
 data DeclTypeOf name a where
     DeclFelt :: TypeOf name ~ Felt => DeclTypeOf name Felt
     DeclBool :: TypeOf name ~ Bool => DeclTypeOf name Bool
-
-type KnownDecl :: (Symbol -> Type) -> Type -> Constraint
-class KnownDecl decl a | decl -> a, a -> decl where
-    knownDecl :: forall name. TypeOf name ~ a => decl name
-
-data DeclFelt name where
-    Felt :: TypeOf name ~ Felt => DeclFelt name
-instance KnownDecl DeclFelt Felt where
-    knownDecl = Felt
-
-data DeclBool name where
-    Bool :: TypeOf name ~ Bool => DeclBool name
-instance KnownDecl DeclBool Bool where
-    knownDecl = Bool
 
 class KnownType a where
     knownType :: forall name. TypeOf name ~ a => DeclTypeOf name a
@@ -241,7 +230,7 @@ type Unequatable msg a b = UnequatableGo (Equals a b) msg
 -- matching a lot guarantees go out of the window... or do they, given that the forged equality
 -- constraint is only accessible through pattern matching?
 instance
-        ( res ~ (Expr a -> Body (decl name)), KnownSymbol name, KnownDecl decl a
+        ( res ~ (Expr a -> Body (Var name a)), KnownSymbol name
         , Unequatable ('Text "'" :<>: 'Text name :<>: 'Text "' is declared twice") (TypeOf name) a
         ) => HasField name (Prefix "declare" a) res where
     getField _ (Expr expr_) = do
@@ -253,7 +242,7 @@ instance
         -- declaring the same name twice is supposed to result in a 'TypeError', so this danger
         -- should be ruled out.
         case unsafeEqualityProof @(TypeOf name) @a of
-            UnsafeRefl -> pure knownDecl
+            UnsafeRefl -> pure Var
 
 instance (res ~ Expr a, TypeOf name ~ a, KnownSymbol name, KnownType a) =>
         HasField name (Prefix "get" a) res where

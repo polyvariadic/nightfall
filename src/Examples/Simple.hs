@@ -114,7 +114,7 @@ simpleVar1Body = do
     comment "Simple addition, but with a variable storing a value"
     comment "a = 999"
     comment "a + 1. It should return 1000"
-    Felt <- declare.a (lit 999)
+    Var <- declare.a (lit 999)
     ret $ add get.a (lit 1)
 
 simpleVar1Prog :: ZKProgram
@@ -144,9 +144,9 @@ simpleVar2Body = do
     comment "a = 888, b = 222"
     comment "c = a - b. Return c"
     comment "It should return 666"
-    Felt <- declare.a 888
-    Felt <- declare.b 222
-    Felt <- declare.c $ get.a - get.b
+    Var <- declare.a 888
+    Var <- declare.b 222
+    Var <- declare.c $ get.a - get.b
     ret get.c
 
 simpleVar2Prog :: ZKProgram
@@ -162,8 +162,8 @@ simpleVar3Body :: Body ()
 simpleVar3Body = do
     comment "Rewrite on the same variable several times"
     comment "a = 10, b = 20, a = 50, a + b. Should return 70"
-    Felt <- declare.a 10
-    Felt <- declare.b 20
+    Var <- declare.a 10
+    Var <- declare.b 20
     set.a 50
     ret $ get.a + get.b
 
