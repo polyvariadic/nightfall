@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE ImplicitParams #-}
+{-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
@@ -31,13 +31,13 @@ collatzFixedStmts = do
     emptyLine
     Var <- declare.start 10
     Var <- declare.length 1
-    Var <- declare.n ?start
-    while (?n `gt` 1) $ do
-        set.length $ ?length + 1
-        ifElse (isOdd ?n)
-            (set.n $ ?n * 3 + 1)
-            (set.n $ ?n `div'` 2)
-    ret ?length
+    Var <- declare.n #start
+    while (#n `gt` 1) $ do
+        set.length $ #length + 1
+        ifElse (isOdd #n)
+            (set.n $ #n * 3 + 1)
+            (set.n $ #n `div'` 2)
+    ret #length
 
 collatzFixedProg :: ZKProgram
 collatzFixedProg = mkSimpleProgram "Fixed Collatz (10)" collatzFixedStmts
@@ -61,14 +61,14 @@ collatzPrivStmts = do
     comment "It returns the length of the sequence"
     emptyLine
     Var @Felt <- declare.start nextSecret
-    Var <- declare.n ?start
+    Var <- declare.n #start
     Var <- declare.length 1
-    while (?n `gt` 1) $ do
+    while (#n `gt` 1) $ do
         add.mut.length 1
-        ifElse (isOdd ?n)
+        ifElse (isOdd #n)
             (mut.n $ \n -> n * 3 + 1)
             (mut.n $ \n -> n `div'` 2)
-    ret ?length
+    ret #length
 
 collatzPrivProg :: ZKProgram
 collatzPrivProg = mkZKProgram "collatz private" collatzPrivStmts [] "src/Examples/collatz_secrets.inputs"

@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE ImplicitParams #-}
+{-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
 module Examples.Loops ( sumTo10Prog
@@ -26,10 +26,10 @@ sumTo10Stmts = do
     comment "It should return 55"
     Var <- declare.n 10
     Var <- declare.acc 0
-    while (?n `gt` 0) $ do
-        set.acc $ ?acc + ?n
-        set.n $ ?n - 1
-    ret ?acc
+    while (#n `gt` 0) $ do
+        set.acc $ #acc + #n
+        set.n $ #n - 1
+    ret #acc
 
 sumTo10Prog :: ZKProgram
 sumTo10Prog = mkSimpleProgram "Sum to 10" sumTo10Stmts
