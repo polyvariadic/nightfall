@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE ImplicitParams #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
 module Examples.Simple ( trivial1Prog
@@ -115,7 +116,7 @@ simpleVar1Body = do
     comment "a = 999"
     comment "a + 1. It should return 1000"
     Var <- declare.a (lit 999)
-    ret $ add get.a (lit 1)
+    ret $ add ?a (lit 1)
 
 simpleVar1Prog :: ZKProgram
 simpleVar1Prog = ZKProgram { pName = "simple var 1"
@@ -146,8 +147,8 @@ simpleVar2Body = do
     comment "It should return 666"
     Var <- declare.a 888
     Var <- declare.b 222
-    Var <- declare.c $ get.a - get.b
-    ret get.c
+    Var <- declare.c $ ?a - ?b
+    ret ?c
 
 simpleVar2Prog :: ZKProgram
 simpleVar2Prog = ZKProgram { pName = "simple var 2"
@@ -165,7 +166,7 @@ simpleVar3Body = do
     Var <- declare.a 10
     Var <- declare.b 20
     set.a 50
-    ret $ get.a + get.b
+    ret $ ?a + ?b
 
 simpleVar3Prog :: ZKProgram
 simpleVar3Prog = mkSimpleProgram "simple var 3" simpleVar3Body

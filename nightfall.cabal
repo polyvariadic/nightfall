@@ -47,6 +47,7 @@ library
                     , dlist
                     , filepath
                     , free
+                    , ghc-prim
                     , mod
                     , mtl
                     , process

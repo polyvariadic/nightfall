@@ -26,6 +26,7 @@ module Nightfall.Lang.Syntax.DotRecord where
 import Nightfall.Lang.Types
 import Nightfall.Lang.Internal.Types
 
+import GHC.Classes
 import GHC.TypeLits
 import GHC.Records
 import GHC.Exts
@@ -251,6 +252,10 @@ instance (res ~ Expr a, TypeOf name ~ a, KnownSymbol name, KnownType a) =>
         DeclBool -> VarB name
       where
         name = symbolVal' (proxy# @name)
+
+instance (res ~ Expr a, TypeOf name ~ a, KnownSymbol name, KnownType a) =>
+        IP name res where
+    ip = getField @name get
 
 -- 'KnownType' is only needed to prevent @set.x@ from being successfully type checked when there's
 -- no @x@ in the current scope. Without the constraint, GHC would happily infer

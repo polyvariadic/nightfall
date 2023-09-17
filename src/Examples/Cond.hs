@@ -1,4 +1,5 @@
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE ImplicitParams #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
 module Examples.Cond ( simpleIfProg
@@ -58,12 +59,12 @@ ifVarBody = do
     Var <- declare.a 145
     Var <- declare.b 79
     Var <- declare.target 203
-    Var <- declare.sum $ get.a + get.b
+    Var <- declare.sum $ ?a + ?b
     Var <- declare.okVal 10
     Var <- declare.nokVal 20
-    ifElse (get.sum `eq` get.target)
-        (ret get.okVal)
-        (ret get.nokVal)
+    ifElse (?sum `eq` ?target)
+        (ret ?okVal)
+        (ret ?nokVal)
 
 ifVarProg :: ZKProgram
 ifVarProg = mkSimpleProgram "If with vars" ifVarBody
@@ -87,9 +88,9 @@ simpleInfBody = do
     emptyLine
     Var <- declare.n1 4238
     Var <- declare.n2 21987
-    ifElse (get.n1 `lte` get.n2)
-        (ret get.n1)
-        (ret get.n2)
+    ifElse (?n1 `lte` ?n2)
+        (ret ?n1)
+        (ret ?n2)
 
 simpleInfProg :: ZKProgram
 simpleInfProg = mkSimpleProgram "simple inf" simpleInfBody
